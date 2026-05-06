@@ -515,6 +515,7 @@ class MainWindow(QMainWindow):
             qb.addSeparator()
             b_clip = QPushButton("Send Clipboard to VM")
             b_clip.clicked.connect(self.action_send_clipboard_vm)
+            b_clip.setToolTip("xclip must be running in target VM")
             qb.addWidget(b_clip)
             b_file = QPushButton("Send File to VM")
             b_file.clicked.connect(self.action_send_file_vm)
