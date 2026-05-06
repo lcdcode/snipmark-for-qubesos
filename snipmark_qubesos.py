@@ -30,6 +30,16 @@ TOOL_BLUR = "blur"
 TOOL_TEXT = "text"
 
 
+# ----------------------------------------------------------------
+# User defaults. Edit these to change the initial tool settings.
+# ----------------------------------------------------------------
+DEFAULT_TOOL = TOOL_BOX               # one of TOOL_CROP / TOOL_HIGHLIGHT / TOOL_BOX / TOOL_ARROW / TOOL_BLUR / TOOL_TEXT
+DEFAULT_COLOR_RGB = (145, 65, 172)    # (R, G, B), 0-255 - I like purple
+DEFAULT_LINE_WIDTH = 5                # pixels, 1-30
+DEFAULT_FONT_FAMILY = "Sans"          # any installed family, e.g. "Sans", "Mono", "Serif"
+DEFAULT_FONT_SIZE = 20                # point size for the text tool
+
+
 @dataclass
 class Annotation:
     kind: str
@@ -124,10 +134,10 @@ class Canvas(QWidget):
         self.annotations: List[Annotation] = []
         self.undo_stack: List[Tuple[QImage, List[Annotation]]] = []
         self.redo_stack: List[Tuple[QImage, List[Annotation]]] = []
-        self.tool = TOOL_BOX
-        self.color = QColor(220, 30, 30)
-        self.line_width = 3
-        self.font = QFont("Sans", 16)
+        self.tool = DEFAULT_TOOL
+        self.color = QColor(*DEFAULT_COLOR_RGB)
+        self.line_width = DEFAULT_LINE_WIDTH
+        self.font = QFont(DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE)
         self.dragging = False
         self.drag_start: Optional[QPoint] = None
         self.drag_end: Optional[QPoint] = None
@@ -357,7 +367,7 @@ class Canvas(QWidget):
         if rect.isEmpty():
             return
         region = self.base_image.copy(rect)
-        factor = 12
+        factor = 6
         small = region.scaled(
             max(1, region.width() // factor),
             max(1, region.height() // factor),
@@ -455,7 +465,7 @@ class MainWindow(QMainWindow):
             a.triggered.connect(lambda _checked, k=key: self._set_tool(k))
             tb.addAction(a)
             tool_group.addAction(a)
-            if key == TOOL_BOX:
+            if key == DEFAULT_TOOL:
                 a.setChecked(True)
 
         tb.addSeparator()
