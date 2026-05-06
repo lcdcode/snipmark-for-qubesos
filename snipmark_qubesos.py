@@ -7,7 +7,7 @@ import os
 import subprocess
 import sys
 import tempfile
-import time
+from datetime import datetime
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 
@@ -597,7 +597,7 @@ class MainWindow(QMainWindow):
         if img is None:
             self.statusBar().showMessage("Nothing to save")
             return
-        default = f"snipmark_{int(time.time())}.png"
+        default = f"snipmark_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.png"
         path, _ = QFileDialog.getSaveFileName(
             self, "Save As", default,
             "PNG (*.png);;JPEG (*.jpg);;BMP (*.bmp)",
@@ -641,7 +641,7 @@ class MainWindow(QMainWindow):
         if img is None:
             self.statusBar().showMessage("Nothing to send")
             return
-        fname = f"snipmark_{int(time.time())}.png"
+        fname = f"snipmark_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.png"
         tmpdir = tempfile.mkdtemp(prefix="snipmark_")
         tmp = os.path.join(tmpdir, fname)
         try:
